@@ -31,7 +31,7 @@ export const TouchPoint = ({ x, y, onSuccess, onError }: TouchPointContent) => {
         setScale((ant) => {
           const nextScale = ant + 0.1;
 
-          if (nextScale >= 1.2) {
+          if (nextScale >= 1.7) {
             clearInterval(animationInterval);
             setStatus('error');
           }

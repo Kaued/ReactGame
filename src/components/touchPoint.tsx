@@ -1,17 +1,18 @@
 import { Flex } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
+import ball from "../assets/ball.png";
 
 export interface TouchPointContent {
   x: string,
   y: string,
   onError: () => void
-  onSucess: () => void
+  onSuccess: () => void
 }
 
-export const TouchPoint = ({ x, y, onSucess, onError }: TouchPointContent) => {
+export const TouchPoint = ({ x, y, onSuccess, onError }: TouchPointContent) => {
 
   const [scale, setScale] = useState(0.1);
-  const [status, setStatus] = useState('pedding');
+  const [status, setStatus] = useState('pending');
   const [animationInterval, setAnimationInterval] = useState<undefined | number>();
 
   const onTouch = () => {
@@ -19,13 +20,13 @@ export const TouchPoint = ({ x, y, onSucess, onError }: TouchPointContent) => {
       clearInterval(animationInterval);
     }
 
-    setStatus('sucess');
-    onSucess();
+    setStatus('success');
+    onSuccess();
   };
 
   useEffect(() => {
 
-    if (animationInterval === undefined && status === 'pedding') {
+    if (animationInterval === undefined && status === 'pending') {
       setAnimationInterval(setInterval(() => {
         setScale((ant) => {
           const nextScale = ant + 0.1;
@@ -37,10 +38,14 @@ export const TouchPoint = ({ x, y, onSucess, onError }: TouchPointContent) => {
           
           return nextScale;
         });
-      }, 120));
-    } else if (status !== 'pedding' && animationInterval) {
+      }, 200));
+    } else if (status !== 'pending' && animationInterval) {
       clearInterval(animationInterval);
-      onError();
+
+      if(status === 'error'){
+        setStatus('end');
+        onError();
+      }
     }
 
   }, [animationInterval, status, onError]);
@@ -51,10 +56,12 @@ export const TouchPoint = ({ x, y, onSucess, onError }: TouchPointContent) => {
       h={`${50 * scale}px`}
       position={'absolute'}
       top={y}
+      zIndex={11}
       right={x}
-      onClick={status === 'pedding' ? onTouch : () => { }}
-      bg={status == 'error' ? 'red' : 'white'}
+      onClick={status === 'pending' ? onTouch : () => { }}
       cursor={'pointer'}
+      backgroundImage={ball}
+      backgroundSize={'contain'}
     >
 
     </Flex>

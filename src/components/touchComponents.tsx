@@ -1,12 +1,17 @@
-import { Flex, Text } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 import { TouchPoint } from "./touchPoint"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
+import { TouchInformation } from "./touchInformation";
 
 export const TouchComponents = () => {
 
+  const navigator = useNavigate();
+  const [life, setLife] = useState<number>(3);
+  const [touchGenerate, setTouchGenerate] = useState<number>(0);
   const [positionX, setPositionX] = useState<string>();
   const [positionY, setPositionY] = useState<string>();
-  const [next, setNext] = useState<number>(0);
+  const [point, setPoint] = useState<number>(0);
 
   const randomInt = (min: number, max: number): number => {
     min = Math.ceil(min);
@@ -14,11 +19,27 @@ export const TouchComponents = () => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
   
+  const onFail = () =>{
+    if( life > 1){
+      setLife(life-1);
+    }else{
+      navigator("/tryAgain");
+    }
+  }
+
+  const onSuccess = () =>{
+    setPoint((ant) => ant+1);
+  }
 
   useEffect(() => {
-    setPositionX(`${randomInt(0, 90)}%`);
-    setPositionY(`${randomInt(0, 90)}%`);
-  }, [next]);
+    if (point < 20){
+      setPositionX(`${randomInt(0, 90)}%`);
+      setPositionY(`${randomInt(0, 90)}%`);
+      setTouchGenerate((ant)=>ant+1);
+    }else{
+      navigator("/");
+    }
+  }, [point, life, navigator]);
 
   return (
     <Flex
@@ -27,8 +48,8 @@ export const TouchComponents = () => {
       position={'absolute'}
       zIndex={'10'}
     >
-      <Text color={"yellow"}>{next}</Text>
-      <TouchPoint key={next} onError={() => {setNext((ant)=>ant!-1) }} onSucess={() => {setNext((ant)=>ant!+1) }} x={positionX!} y={positionY!} />
+      <TouchInformation life={life} points={point} />
+      <TouchPoint key={touchGenerate} onError={onFail} onSuccess={onSuccess} x={positionX!} y={positionY!} />
     </Flex>
   )
 }

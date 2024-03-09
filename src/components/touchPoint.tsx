@@ -38,7 +38,7 @@ export const TouchPoint = ({ x, y, onSuccess, onError }: TouchPointContent) => {
           
           return nextScale;
         });
-      }, 200));
+      }, 100));
     } else if (status !== 'pending' && animationInterval) {
       clearInterval(animationInterval);
 

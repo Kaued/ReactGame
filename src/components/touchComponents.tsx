@@ -32,19 +32,20 @@ export const TouchComponents = () => {
   }
 
   useEffect(() => {
-    if (point < 20){
+    if (point < 13){
       setPositionX(`${randomInt(0, 90)}%`);
       setPositionY(`${randomInt(0, 90)}%`);
       setTouchGenerate((ant)=>ant+1);
     }else{
-      navigator("/");
+      navigator("/endGame");
     }
   }, [point, life, navigator]);
 
   return (
     <Flex
       w={'100%'}
-      h={'100%'}
+      h={'95%'}
+      bottom={'5rem'}
       position={'absolute'}
       zIndex={'10'}
     >
